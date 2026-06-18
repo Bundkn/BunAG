@@ -1,0 +1,5 @@
+file update lastest data (cleaned)
+  chuẩn hóa tên biến
+  xử lý NA bằng MICE
+  ag1, ag2 đã bỏ kali
+  ag1a, ag2a = hiệu chỉnh albumin
