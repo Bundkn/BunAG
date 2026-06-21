@@ -28,6 +28,7 @@ createTable(compareGroups(death~ag1+ag2,data=m))
 # So sánh biến định lượng 
 t.test() #chuẩn
 wilcox.test() #không chuẩn
+
 # Tạo bảng mô tả theo phân phối
 library(dplyr)
 library(purrr)
@@ -42,7 +43,8 @@ summary_auto <- map_dfr(vars, function(v) {
   x <- m[[v]]
   x <- x[!is.na(x)]
   
-  shapiro_p <- if(length(x) >= 3) {
+  # kiểm tra có đủ điều kiện chạy Shapiro không
+  shapiro_p <- if(length(x) >= 3 && n_distinct(x) > 1) {
     shapiro.test(x)$p.value
   } else {
     NA_real_
@@ -53,29 +55,42 @@ summary_auto <- map_dfr(vars, function(v) {
   tibble(
     variable = v,
     n = length(x),
+    unique_value = n_distinct(x),
     shapiro_p = round(shapiro_p, 4),
-    distribution = ifelse(
-      normal,
-      "Phân phối chuẩn",
-      "Không phân phối chuẩn"
+    distribution = case_when(
+      is.na(shapiro_p) ~ "Không đánh giá được",
+      normal ~ "Phân phối chuẩn",
+      TRUE ~ "Không phân phối chuẩn"
     ),
-    description = ifelse(
-      normal,
-      paste0(
-        round(mean(x), 2), " ± ", round(sd(x), 2)
+    description = case_when(
+      
+      is.na(shapiro_p) ~ paste0(
+        "Median = ", median(x),
+        " (giá trị hằng)"
       ),
-      paste0(
-        round(median(x), 2), " (",
-        round(quantile(x, 0.25), 2), "–",
-        round(quantile(x, 0.75), 2), ")"
+      
+      normal ~ paste0(
+        round(mean(x), 2),
+        " ± ",
+        round(sd(x), 2)
+      ),
+      
+      TRUE ~ paste0(
+        round(median(x), 2),
+        " (",
+        round(quantile(x, 0.25), 2),
+        "–",
+        round(quantile(x, 0.75), 2),
+        ")"
       )
     )
   )
 })
 
 print(summary_auto, n = Inf)
-library(writexl)
+install.packages("writexl")
 write_xlsx(summary_auto, "summary_auto.xlsx")
+
 # Vẽ Histogram
 library(ggplot2)
 ggplot(m, aes(x = ag1)) + 
