@@ -41,8 +41,17 @@ vars <- c(
 "alb","ag1a","ag2a"
 )
 
+## chia theo sống sót
 createTable(
   compareGroups(songsot ~ ., data = m[, c("songsot", vars)])
+)
+## chia theo tử vong
+createTable(
+  compareGroups(death ~ ., data = m[,c("death",vars)])
+)
+## chia theo ag1a
+createTable(
+  compareGroups(ag1a_group ~ ., data = m[,c("ag1a_group",vars)])
 )
 # So sánh biến định lượng 
 t.test() #chuẩn
