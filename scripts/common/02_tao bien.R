@@ -2,6 +2,15 @@
 install.packages("tidyverse")
 library(dplyr)
 library(tidyr)
+# tạo death
+m <- m %>%
+  mutate(
+    death = case_when(
+      songsot == 1 ~ 0,
+      songsot == 0 ~ 1,
+      TRUE ~ NA_real_
+    )
+  )
 # tạo biến ag không kali
 m <- m %>%
   mutate(
