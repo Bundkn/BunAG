@@ -20,7 +20,8 @@ m %>%
 # Kiểm tra phân phối chuẩn
 install.packages("stats")
 shapiro.test()
-
+# Mô tả biến định lượng 
+summary(m$cltm)
 # So sánh
 install.packages("compareGroups")
 library(compareGroups)
