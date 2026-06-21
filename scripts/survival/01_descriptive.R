@@ -43,8 +43,11 @@ summary_auto <- map_dfr(vars, function(v) {
   x <- m[[v]]
   x <- x[!is.na(x)]
   
-  # kiểm tra có đủ điều kiện chạy Shapiro không
-  shapiro_p <- if(length(x) >= 3 && n_distinct(x) > 1) {
+  n <- length(x)
+  n_unique <- n_distinct(x)
+  
+  # Shapiro test an toàn
+  shapiro_p <- if(n >= 3 && n_unique > 1) {
     shapiro.test(x)$p.value
   } else {
     NA_real_
@@ -52,43 +55,39 @@ summary_auto <- map_dfr(vars, function(v) {
   
   normal <- !is.na(shapiro_p) & shapiro_p > 0.05
   
+  fmt <- function(z) round(z, 1)
+  
+  description <- case_when(
+    
+    n_unique <= 1 ~ paste0(fmt(x[1]), " (constant)"),
+    
+    normal ~ paste0(
+      fmt(mean(x)), " ± ", fmt(sd(x))
+    ),
+    
+    TRUE ~ paste0(
+      fmt(median(x)), " (",
+      fmt(quantile(x, 0.25)), "–",
+      fmt(quantile(x, 0.75)), ")"
+    )
+  )
+  
   tibble(
     variable = v,
-    n = length(x),
-    unique_value = n_distinct(x),
+    n = n,
+    unique_value = n_unique,
     shapiro_p = round(shapiro_p, 4),
     distribution = case_when(
       is.na(shapiro_p) ~ "Không đánh giá được",
       normal ~ "Phân phối chuẩn",
       TRUE ~ "Không phân phối chuẩn"
     ),
-    description = case_when(
-      
-      is.na(shapiro_p) ~ paste0(
-        "Median = ", median(x),
-        " (giá trị hằng)"
-      ),
-      
-      normal ~ paste0(
-        round(mean(x), 2),
-        " ± ",
-        round(sd(x), 2)
-      ),
-      
-      TRUE ~ paste0(
-        round(median(x), 2),
-        " (",
-        round(quantile(x, 0.25), 2),
-        "–",
-        round(quantile(x, 0.75), 2),
-        ")"
-      )
-    )
+    description = description
   )
 })
 
 print(summary_auto, n = Inf)
-install.packages("writexl")
+
 write_xlsx(summary_auto, "summary_auto.xlsx")
 
 # Vẽ Histogram
