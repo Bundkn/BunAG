@@ -1,0 +1,49 @@
+library(ggplot2)
+# vẽ biểu đồ Correlation
+ggplot(age, aes(x = sofa, y = sofa2)) +
+  geom_point(alpha = 0.6) +
+  geom_smooth(method = "lm", se = TRUE) +
+  labs(
+    title = "Correlation between SOFA and SOFA-2 scores",
+    x = "SOFA score",
+    y = "SOFA-2 score"
+  )
+
+ggplot(age, aes(x = sofa, y = sofa2)) +
+  geom_jitter(width = 0.2, height = 0.2, alpha = 0.6) +
+  geom_smooth(method = "lm", se = TRUE) +
+  labs(
+    title = "Correlation between SOFA and SOFA-2 scores",
+    x = "SOFA score",
+    y = "SOFA-2 score"
+  )
+
+# Chênh lệch giữa SOFA-2 và SOFA
+age <- age %>%
+  mutate(diff_sofa2_sofa = sofa2 - sofa)
+
+summary(age$diff_sofa2_sofa)
+table(age$diff_sofa2_sofa, useNA = "ifany")
+# Vẽ  Bland–Altman đơn giản
+age <- age %>%
+  mutate(
+    mean_sofa = (sofa + sofa2) / 2,
+    diff_sofa = sofa2 - sofa
+  )
+# vẽ Bland-Altman plot
+ggplot(age, aes(x = mean_sofa, y = diff_sofa)) +
+  geom_point(alpha = 0.6) +
+  geom_hline(yintercept = mean(age$diff_sofa, na.rm = TRUE), linetype = "dashed") +
+  geom_hline(
+    yintercept = mean(age$diff_sofa, na.rm = TRUE) + 1.96 * sd(age$diff_sofa, na.rm = TRUE),
+    linetype = "dotted"
+  ) +
+  geom_hline(
+    yintercept = mean(age$diff_sofa, na.rm = TRUE) - 1.96 * sd(age$diff_sofa, na.rm = TRUE),
+    linetype = "dotted"
+  ) +
+  labs(
+    title = "Bland-Altman plot between SOFA and SOFA-2",
+    x = "Mean of SOFA and SOFA-2",
+    y = "SOFA-2 minus SOFA"
+  )
