@@ -26,6 +26,24 @@ summary(m$cltm)
 install.packages("compareGroups")
 library(compareGroups)
 createTable(compareGroups(death~ag1+ag2,data=m))
+vars <- c(
+"bmi","tuoi","gioitinh","sot","daubung",
+"daunguc","daudau","khotho","ho","tieuchay","tietnieu","vangda","tcyt","daukhop",
+"chuongbung","ankem","nonoi","sungdau","phu","tcnieu","tha","suytim","bmv",
+"rln","rungnhi","dtd","ckdc","ckdr","xogan",
+"bpm","ungthu","rlyt","crt","tst","hatt","hatr","nhietdo","rr",
+"spo2","wbc","neu","lym","mono","eos","baso","hb","plt",
+"pt","inr","aptt","glu","ure","cre","egfr","bitp","bitt",
+"ast","alt","natm","ktm","cltm","catm","cocrp","crp","copct",
+"pct","ph1","pco21","po21","hco31","lac1","na1","k1","cl1",
+"ag1","pf1","ph2","pco22","po22","hco32","lac2","na2","k2",
+"cl2","ag2","pf2","giocc","ngayicu","tgnv","crrt","thomayicu","sofa","sofa2","thomay","gcs",
+"alb","ag1a","ag2a"
+)
+
+createTable(
+  compareGroups(songsot ~ ., data = m[, c("songsot", vars)])
+)
 # So sánh biến định lượng 
 t.test() #chuẩn
 wilcox.test() #không chuẩn
