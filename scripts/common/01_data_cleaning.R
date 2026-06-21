@@ -1,4 +1,7 @@
 # Import data
+library(readr)
+m <- read_csv("agdfupdate2.csv")
+View(m)
 
 install.packages("tidyverse")
 library(dplyr)
