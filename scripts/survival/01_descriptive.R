@@ -109,32 +109,48 @@ ggplot(m, aes(x = ag1)) +
     x = "Anion gap lần 1",
     y = "Mật độ"
   )
+
 # Vẽ violin
 library(tidyr)
 library(ggplot2)
+## xoay trục
+m_long <- m %>%
+  pivot_longer(
+    cols = c(ag1, ag2),
+    names_to = "time",
+    values_to = "ag"
+  )
+## plot (
 ggplot(m_long, aes(x = time, y = ag)) + 
+  
   geom_violin(
-    fill = "skyblue",
+    fill = "#CFE8D6",
     color = "black",
-    trim = FALSE
+    trim = FALSE,
+    linewidth = 0.6
   ) +  
+  
   geom_boxplot(
-    width = 0.15,
-    outlier.color = "red",
-    outlier.size = 2
+    width = 0.12,
+    outlier.shape = NA,
+    fill = "#4C9F70",
+    color = "black"
   ) +
+  
   geom_jitter(
     width = 0.08,
-    alpha = 0.5
-  ) + 
+    alpha = 0.6,
+    size = 1.8,
+    shape = 21,
+    fill = "red",
+    color = "black"
+  ) +
+  
   scale_x_discrete(
     labels = c(
       ag1 = "Anion gap lần 1",
       ag2 = "Anion gap lần 2"
     )
   ) +
-  labs(
-    title = "Violin plot của Anion gap",
-    x = "Thời điểm",
-    y = "Anion gap"
-  )
+  
+  theme_classic()
