@@ -20,6 +20,14 @@ m <- m %>%
 # tạo biến ag1a, ag2a ~ AG hiệu chỉnh albumin
 m$ag1a <- m$ag1 + 2.5 * (4 - m$alb/10)
 m$ag2a <- m$ag2 + 2.5 * (4 - m$alb/10)
+
+# biến ag1a_group
+ag1a_group = case_when(
+  m$ag1a < 17.38 ~ 0,
+  m$ag1a >= 17.38 ~ 1,
+  TRUE ~ NA_real_
+)
+
 # tạo biến sofa
 m <- m %>%
   mutate(
