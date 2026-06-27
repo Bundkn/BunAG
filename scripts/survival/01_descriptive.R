@@ -17,6 +17,20 @@ library(gtsummary)
 m %>%
   select(tuoi, gioitinh, ag1, ag2, lac1, lac2, event28) %>%
   tbl_summary(by = event28)
+
+# tạo bảng tự động biến định tính
+cat_excel <- m %>%
+  select(all_of(factor_vars)) %>%
+  tbl_summary(
+    statistic = all_categorical() ~ "{n} ({p}%)",
+    digits = all_categorical() ~ c(0, 1),
+    missing = "ifany"
+  ) %>%
+  as_tibble()
+write_xlsx(
+  cat_excel,
+  "bang_bien_dinh_tinh.xlsx"
+)
 # Kiểm tra phân phối chuẩn
 install.packages("stats")
 shapiro.test()
