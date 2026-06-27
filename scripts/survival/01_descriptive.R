@@ -15,8 +15,8 @@ tabyl(m$songsot)
 install.packages("gtsummary")
 library(gtsummary)
 m %>%
-  select(tuoi, gioitinh, ag1, ag2, lac1, lac2, songsot) %>%
-  tbl_summary(by = songsot)
+  select(tuoi, gioitinh, ag1, ag2, lac1, lac2, event28) %>%
+  tbl_summary(by = event28)
 # Kiểm tra phân phối chuẩn
 install.packages("stats")
 shapiro.test()
@@ -25,7 +25,7 @@ summary(m$cltm)
 # So sánh
 install.packages("compareGroups")
 library(compareGroups)
-createTable(compareGroups(death~ag1+ag2,data=m))
+createTable(compareGroups(event28~ag1+ag2,data=m))
 vars <- c(
 "bmi","tuoi","gioitinh","sot","daubung",
 "daunguc","daudau","khotho","ho","tieuchay","tietnieu","vangda","tcyt","daukhop",
@@ -38,17 +38,14 @@ vars <- c(
 "pct","ph1","pco21","po21","hco31","lac1","na1","k1","cl1",
 "ag1","pf1","ph2","pco22","po22","hco32","lac2","na2","k2",
 "cl2","ag2","pf2","giocc","ngayicu","tgnv","crrt","thomayicu","sofa","sofa2","thomay","gcs",
-"alb","ag1a","ag2a"
+"alb","ag1a","ag2a", "event28"
 )
 
-## chia theo sống sót
-createTable(
-  compareGroups(songsot ~ ., data = m[, c("songsot", vars)])
-)
 ## chia theo tử vong
 createTable(
-  compareGroups(death ~ ., data = m[,c("death",vars)])
+  compareGroups(event28 ~ ., data = m[, c("event28", vars)])
 )
+
 ## chia theo ag1a
 createTable(
   compareGroups(ag1a_group ~ ., data = m[,c("ag1a_group",vars)])
