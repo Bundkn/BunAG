@@ -49,7 +49,7 @@ dt <- data.frame(
 
 dt$`OR (95% CI)` <- ifelse(is.na(dt$est), "", sprintf("%.3f (%.3f-%.3f)", dt$est, dt$low, dt$hi))
 dt$`P value` <- ifelse(is.na(dt$p), "", ifelse(dt$p < 0.001, "<0.001", sprintf("%.3f", dt$p)))
-dt$col <- ifelse(is.na(dt$est), "grey", ifelse(dt$p > 0.05, "grey", ifelse(dt$est > 1, "red", "darkblue")))
+dt$col <- ifelse(is.na(dt$est), "grey", ifelse(dt$p > 0.05, "grey", ifelse(dt$est >= 1, "red", "darkblue")))
 
 # Data hiển thị (Xóa bỏ các khoảng trắng "lừa" ở chữ Plot cũ đi để căn giữa chuẩn)
 dt_display <- data.frame(
