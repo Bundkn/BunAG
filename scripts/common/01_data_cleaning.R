@@ -16,14 +16,14 @@ factor_vars <- c(
   "crrt", "thomay", "thomayicu",
   "pttt", "loaipttt",
   "caymau", "kqmau", 
-  "caydam", "kqdam", "vkdam",
-  "caynt", "kqnt", "vknt",
-  "caydich", "kqdich", "vkdich",
-  "cayapxe", "kqapxe", "vkapxe",
-  "caykhac", "kqkhac", "vkkhac"
+  "caydam", "kqdam", 
+  "caynt", "kqnt", 
+  "caydich", "kqdich", 
+  "cayapxe", "kqapxe", 
+  "caykhac", "kqkhac"
 )
 
-keep_chr_vars <- c("sonhapvien", "vkmau")
+keep_chr_vars <- c("sonhapvien", "vkmau", "vkdam", "vkdich", "vknt", "vkkhac", "vkapxe")
 
 m <- m %>%
   mutate(
