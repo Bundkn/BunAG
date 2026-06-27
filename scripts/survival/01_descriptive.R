@@ -55,6 +55,8 @@ t.test() #chuẩn
 wilcox.test() #không chuẩn
 
 # Tạo bảng mô tả theo phân phối
+install.packages("writexl")   
+library(writexl)
 library(dplyr)
 library(purrr)
 library(tibble)
