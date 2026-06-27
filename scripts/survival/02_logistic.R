@@ -22,7 +22,7 @@ sapply(u_vars, function(v) length(unique(na.omit(m[[v]]))))
 # Chạy đơn biến
 results <- lapply(u_vars, function(v) {
   model <- glm(
-    as.formula(paste("death ~", v)),
+    as.formula(paste("event28 ~", v)),
     data = m,
     family = binomial
   )
