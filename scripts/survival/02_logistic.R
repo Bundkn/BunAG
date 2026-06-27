@@ -55,7 +55,7 @@ dt$col <- ifelse(is.na(dt$est), "grey", ifelse(dt$p > 0.05, "grey", ifelse(dt$es
 dt_display <- data.frame(
   Characteristics = dt$label,
   `OR (95% CI)` = dt$`OR (95% CI)`,
-  `                                          Plot                            ` = "", #mục tiêu là kéo giãn ô plot nên chừa rất nhiều khoảng trắng
+  `                                                  Plot                            ` = "", #mục tiêu là kéo giãn ô plot nên chừa rất nhiều khoảng trắng
   `P value` = dt$`P value`,
   check.names = FALSE
 )
