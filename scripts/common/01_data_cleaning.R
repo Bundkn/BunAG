@@ -23,7 +23,7 @@ factor_vars <- c(
   "caykhac", "kqkhac", "vkkhac"
 )
 
-keep_chr_vars <- c("sonhapvien")
+keep_chr_vars <- c("sonhapvien", "vkmau")
 
 m <- m %>%
   mutate(
