@@ -31,7 +31,9 @@ results <- lapply(u_vars, function(v) {
 })
 donbien <- bind_rows(results)
 print(donbien, n = Inf)
-       
+
+## Vẽ hình forrest
+	   
 # 02. Đa biến ---
 ## Chọn biến
 t_vars <- c(
