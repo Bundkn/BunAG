@@ -54,6 +54,34 @@ vars <- c(
 "cl2","ag2","pf2","giocc","ngayicu","tgnv","crrt","thomayicu","sofa","sofa2","thomay","gcs",
 "alb","ag1a","ag2a", "event28"
 )
+# 1. Loại các biến chỉ có 1 giá trị
+vars <- vars[
+  sapply(m[vars], function(x) {
+    length(unique(na.omit(x))) > 1
+  })
+]
+
+# 2. Tạo bảng so sánh theo event28
+tbl <- m %>%
+  select(event28, all_of(vars)) %>%
+  tbl_summary(
+    by = event28,
+    statistic = list(
+      all_continuous() ~ "{mean} ({sd})\n{p25}; {p75}",
+      all_categorical() ~ "{n} ({p}%)"
+    ),
+    digits = list(
+      all_continuous() ~ 1,
+      all_categorical() ~ c(0, 1)
+    ),
+    missing = "no"
+  ) %>%
+  add_p(
+    pvalue_fun = ~style_pvalue(.x, digits = 3)
+  ) %>%
+  bold_labels()
+
+tbl
 
 ## chia theo tử vong
 createTable(
