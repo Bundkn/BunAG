@@ -12,7 +12,7 @@ factor_vars <- c(
   "tha", "suytim", "bmv", "rln", "rungnhi", "rlnk", "maytn",
   "coicd", "dtd", "ckdc", "ckdr", "xogan", "bpm", "ungthu",
   "rlyt", "crt", "cocrp", "copct", "ttxk",
-  "khoanv", "nhapicu", "songsot", "hientai",
+  "khoanv", "nhapicu", "songsot", "hientai", "event28", "event14",
   "crrt", "thomay", "thomayicu",
   "pttt", "loaipttt",
   "caymau", "kqmau", "vkmau",
