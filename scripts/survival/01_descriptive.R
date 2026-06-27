@@ -10,7 +10,7 @@ describe(m)
 # Mô tả biến định tính: số lượng và tỷ lệ (%)
 install.packages("janitor")
 library(janitor)
-tabyl(m$songsot)
+tabyl(m$event28)
 # mô tả biến định tính = bảng
 install.packages("gtsummary")
 library(gtsummary)
