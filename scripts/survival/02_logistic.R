@@ -208,6 +208,6 @@ bma_fit <- bic.glm(
 summary(bma_fit)
 
 # Logistic đa biến
-  model_multi <- glm(y ~ x1 + x2 + x3, family = binomial, data = )
-  summary(model_multi)
-  exp(cbind(OR = coef(model_multi), confint(model_multi)))
+model_multi <- glm(event28 ~ ag1a + sofa + ungthu, family = binomial, data = m)
+summary(model_multi)
+exp(cbind(OR = coef(model_multi), confint(model_multi)))
