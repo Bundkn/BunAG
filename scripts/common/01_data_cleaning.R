@@ -15,7 +15,7 @@ factor_vars <- c(
   "khoanv", "nhapicu", "songsot", "hientai", "event28", "event14",
   "crrt", "thomay", "thomayicu",
   "pttt", "loaipttt",
-  "caymau", "kqmau", "vkmau",
+  "caymau", "kqmau", 
   "caydam", "kqdam", "vkdam",
   "caynt", "kqnt", "vknt",
   "caydich", "kqdich", "vkdich",
