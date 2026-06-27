@@ -33,7 +33,98 @@ donbien <- bind_rows(results)
 print(donbien, n = Inf)
 
 ## Vẽ hình forrest
-	   
+library(forestploter)
+library(grid)
+
+#========================
+# DATA
+#========================
+dt <- data.frame(
+  label = c("Tuổi", "Sốt", "   Có", "Đái tháo đường", "   Có", "Bệnh phổi mạn", "   Có", "Ung thư", "   Có", "Tần số thở", "Natri tĩnh mạch", "Kali tĩnh mạch", "CRP", "Procalcitonin", "pH lần 1", "pH lần 2", "Lactate lần 1", "Lactate lần 2", "SOFA", "Albumin máu"),
+  est = c(1.03, NA, 0.386, NA, 0.344, NA, 2.99, NA, 3.33, 1.10, 0.943, 1.53, 1.00, 0.994, 0.828, 0.00134, 1.06, 1.28, 1.21, 0.863),
+  low = c(1.00, NA, 0.178, NA, 0.149, NA, 1.06, NA, 1.45, 1.01, 0.892, 1.02, 1.00, 0.986, 0.0173, 0.0000341, 0.951, 1.15, 1.05, 0.794),
+  hi = c(1.06, NA, 0.828, NA, 0.749, NA, 8.62, NA, 7.77, 1.22, 0.992, 2.35, 1.01, 1.00, 47.2, 0.0369, 1.17, 1.45, 1.42, 0.927),
+  p = c(0.0492, NA, 0.0147, NA, 0.00904, NA, 0.0383, NA, 0.00482, 0.0303, 0.0271, 0.0420, 0.0150, 0.137, 0.925, 0.000186, 0.299, 0.0000342, 0.0111, 0.000166)
+)
+
+dt$`OR (95% CI)` <- ifelse(is.na(dt$est), "", sprintf("%.3f (%.3f-%.3f)", dt$est, dt$low, dt$hi))
+dt$`P value` <- ifelse(is.na(dt$p), "", ifelse(dt$p < 0.001, "<0.001", sprintf("%.3f", dt$p)))
+dt$col <- ifelse(is.na(dt$est), "grey", ifelse(dt$p > 0.05, "grey", ifelse(dt$est > 1, "red", "darkblue")))
+
+# Data hiển thị (Xóa bỏ các khoảng trắng "lừa" ở chữ Plot cũ đi để căn giữa chuẩn)
+dt_display <- data.frame(
+  Characteristics = dt$label,
+  `OR (95% CI)` = dt$`OR (95% CI)`,
+  `                                          Plot                            ` = "", #mục tiêu là kéo giãn ô plot nên chừa rất nhiều khoảng trắng
+  `P value` = dt$`P value`,
+  check.names = FALSE
+)
+
+#========================
+# THEME (CẤU HÌNH CĂN GIỮA Ở ĐÂY)
+#========================
+tm <- forest_theme(
+  base_size = 10,
+  plot_width = unit(10, "cm"), 
+  ci_pch = 15,
+  ci_lwd = 2,
+  refline_col = "grey",
+  vertline_col = "grey",
+  title_gp = gpar(cex = 1.2, fontface = "bold"),
+  
+  # 1. Căn giữa cho phần nội dung số liệu (Core)
+  # Cột 1 (Characteristics) căn trái "left", các cột 2, 3, 4 căn giữa "center"
+  core = list(text_just = c("left", "center", "center", "center")),
+  
+  # 2. Căn giữa cho phần tiêu đề (Heading)
+  # Tương tự: Tiêu đề cột 1 căn trái, các cột còn lại căn giữa
+  heading = list(text_just = c("left", "center", "center", "center"))
+)
+
+#========================
+# FOREST PLOT
+#========================
+p <- forest(
+  data = dt_display,
+  est = dt$est,
+  lower = dt$low,
+  upper = dt$hi,
+  ci_column = 3,
+  ref_line = 1,
+  x_trans = "log",
+  xlim = c(0.0001, 50),                  
+  ticks_at = c(0.0001, 0.01, 1, 10, 50), 
+  theme = tm,
+  title = "Hồi quy logistic đơn biến"
+)
+
+#========================
+# APPLY COLOR PER ROW
+#========================
+for (i in seq_len(nrow(dt))) {
+  if (!is.na(dt$est[i])) {
+    tryCatch({
+      p <- edit_plot(p, row = i, col = 3, which = "ci", gp = gpar(col = dt$col[i], fill = dt$col[i]))
+    }, error = function(e) {
+      try({ p <- edit_plot(p, row = i, col = 3, which = "arrow", gp = gpar(col = dt$col[i], fill = dt$col[i])) }, silent = TRUE)
+    })
+  }
+}
+
+p <- add_border(p, part = "header", row = 1, where = "bottom", gp = gpar(lwd = 1.5))
+
+#========================
+# EXPORT PNG
+#========================
+png(
+  "Forest_plot_final.png",
+  width = 14,                            
+  height = 7,
+  units = "in",
+  res = 300
+)
+plot(p)
+dev.off()	   
 # 02. Đa biến ---
 ## Chọn biến
 t_vars <- c(
