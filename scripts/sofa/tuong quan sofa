@@ -33,13 +33,13 @@ m <- m %>%
 # vẽ Bland-Altman plot
 ggplot(m, aes(x = mean_sofa, y = diff_sofa)) +
   geom_point(alpha = 0.6) +
-  geom_hline(yintercept = mean(age$diff_sofa, na.rm = TRUE), linetype = "dashed") +
+  geom_hline(yintercept = mean(m$diff_sofa, na.rm = TRUE), linetype = "dashed") +
   geom_hline(
-    yintercept = mean(age$diff_sofa, na.rm = TRUE) + 1.96 * sd(age$diff_sofa, na.rm = TRUE),
+    yintercept = mean(m$diff_sofa, na.rm = TRUE) + 1.96 * sd(m$diff_sofa, na.rm = TRUE),
     linetype = "dotted"
   ) +
   geom_hline(
-    yintercept = mean(age$diff_sofa, na.rm = TRUE) - 1.96 * sd(age$diff_sofa, na.rm = TRUE),
+    yintercept = mean(m$diff_sofa, na.rm = TRUE) - 1.96 * sd(m$diff_sofa, na.rm = TRUE),
     linetype = "dotted"
   ) +
   labs(
