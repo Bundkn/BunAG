@@ -23,3 +23,37 @@ m %>%
     sofa2_Q1 = quantile(sofa2, 0.25, na.rm = TRUE),
     sofa2_Q3 = quantile(sofa2, 0.75, na.rm = TRUE)
   )
+# histogram sofa
+ggplot(m, aes(x = sofa)) + 
+  geom_histogram(
+    aes(y = ..density..),
+    bins = 30,
+    fill = "skyblue",
+    color = "black"
+  ) +
+  geom_density(
+    color = "red",
+    linewidth = 1
+  ) +
+  labs(
+    title = "Phân phối SOFA score",
+    x = "SOFA score",
+    y = "Mật độ"
+  )
+# histogram sofa-2
+ggplot(m, aes(x = sofa2)) + 
+  geom_histogram(
+    aes(y = ..density..),
+    bins = 30,
+    fill = "skyblue",
+    color = "black"
+  ) +
+  geom_density(
+    color = "red",
+    linewidth = 1
+  ) +
+  labs(
+    title = "Phân phối SOFA-2 score",
+    x = "SOFA-2 score",
+    y = "Mật độ"
+  )
