@@ -46,6 +46,85 @@ roc.test(
   paired = TRUE,
   method = "delong"
 )
+# PLOT ROC
+install.packages("remotes")
+remotes::install_github("cardiomoon/multipleROC")
+library(multipleROC)
+a=multipleROC(event28~sofa,data=m,plot=FALSE)
+b=multipleROC(event28~sofa2,data=m,plot=FALSE)
+plot_ROC(list(a,b),show.eta=FALSE,show.sens=FALSE)
+# Hiển thị
+plot_ROC(list(a,b),show.eta=TRUE,show.sens=TRUE)
+# Tách plot
+  plot_ROC(list(a,b),facet=TRUE)
+  plot_ROC(list(a,b),show.eta=FALSE,show.sens=FALSE, facet=TRUE)
+
+  library(pROC)
+  library(ggplot2)
+  library(dplyr)
+  
+  # Tính ROC
+  roc1 <- roc(m$event28, m$sofa, quiet = TRUE)
+  roc2 <- roc(m$event28, m$sofa2, quiet = TRUE)
+  
+  # Chuyển thành dữ liệu để vẽ
+  roc_data <- bind_rows(
+    data.frame(
+      FPR = 1 - roc1$specificities,
+      Sensitivity = roc1$sensitivities,
+      Score = "SOFA"
+    ),
+    data.frame(
+      FPR = 1 - roc2$specificities,
+      Sensitivity = roc2$sensitivities,
+      Score = "SOFA-2"
+    )
+  )
+  
+  # Vẽ ROC với màu tùy chỉnh
+ p <- ggplot(roc_data, aes(x = FPR, y = Sensitivity, color = Score)) +
+    geom_line(linewidth = 1.2) +
+    geom_abline(
+      intercept = 0, slope = 1,
+      linetype = "dashed", color = "grey60"
+    ) +
+    scale_color_manual(
+      values = c(
+        "SOFA" = "#4472C4",
+        "SOFA-2" = "#C0504D"
+      )
+    ) +
+    scale_x_continuous(
+      limits = c(0, 1),
+      breaks = seq(0, 1, by = 0.2),
+      expand = expansion(mult = c(0.02, 0.02))
+    ) +
+    scale_y_continuous(
+      limits = c(0, 1),
+      breaks = seq(0, 1, by = 0.2),
+      expand = expansion(mult = c(0.02, 0.02))
+    ) +
+    coord_fixed(ratio = 0.6) +
+    labs(
+      title = "ROC curves: SOFA vs SOFA-2",
+      x = "1 - Specificity",
+      y = "Sensitivity",
+      color = NULL
+    ) +
+    theme_classic(base_size = 13) +
+    theme(
+      plot.title = element_text(hjust = 0.5, face = "bold"),
+      legend.position = "bottom"
+    )
+  ggsave(
+    filename = "ROC_SOFA_SOFA2.png",
+    plot = p,
+    width = 9,
+    height = 5.5,
+    units = "in",
+    dpi = 300,
+    bg = "white"
+  )
 # CALIBRITION
   # cài gói
   install.packages("rms")
