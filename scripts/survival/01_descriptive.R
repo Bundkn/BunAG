@@ -67,7 +67,7 @@ tbl <- m %>%
   tbl_summary(
     by = event28,
     statistic = list(
-      all_continuous() ~ "{mean} ({sd})\n{p25}; {p75}",
+      all_continuous() ~ "{mean} ({sd}) {median} ({p25} - {p75})",
       all_categorical() ~ "{n} ({p}%)"
     ),
     digits = list(
