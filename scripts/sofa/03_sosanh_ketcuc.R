@@ -1,3 +1,25 @@
+# so sánh trên tử vong
+tbl <- m %>%
+  select(event28, sofa, sofa2) %>%
+  tbl_summary(
+    by = event28,
+    statistic = list(
+      all_continuous() ~ "{mean} ({sd}) {median} ({p25} - {p75})",
+      all_categorical() ~ "{n} ({p}%)"
+    ),
+    digits = list(
+      all_continuous() ~ 1,
+      all_categorical() ~ c(0, 1)
+    ),
+    missing = "no"
+  ) %>%
+  add_p(
+    pvalue_fun = ~style_pvalue(.x, digits = 3)
+  ) %>%
+  bold_labels()
+
+tbl
+
 # ROC
 roc_sofa <- roc(
   m$event28,
